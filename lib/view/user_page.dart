@@ -53,7 +53,7 @@ class _UserPageState extends State<UserPage> {
                                     borderRadius: BorderRadius.circular(40),
                                   )
                                 ),
-                                onPressed: () => {},
+                                onPressed: () => logOutButtonClicked(context),
                                 child: const Text('Log out',
                                     style: TextStyles.textButton
                                 ),

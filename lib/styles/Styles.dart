@@ -17,6 +17,13 @@ abstract class TextStyles {
       fontWeight: FontWeight.bold
   );
 
+  static const TextStyle textAddress = TextStyle(
+      color: Colors.orange,
+      fontSize: 20,
+      fontFamily: "Mulish",
+      fontWeight: FontWeight.bold
+  );
+
 }
 
 abstract class ButtonStyles {
