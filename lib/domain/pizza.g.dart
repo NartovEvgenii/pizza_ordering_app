@@ -1,10 +1,10 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
+
 part of 'pizza.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
-
 
 class PizzaAdapter extends TypeAdapter<Pizza> {
   @override
