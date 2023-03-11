@@ -9,7 +9,7 @@ class UserService {
   SettingsRepository settingsRepository = SettingsRepository();
 
 
-  Future<void> login(String email, String password) async {
+  Future<bool> login(String email, String password) async {
     var urlLogin = Uri.http('10.0.2.2:8080', 'user/login');
 
     var response = await http.post(urlLogin,
@@ -17,15 +17,20 @@ class UserService {
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(User(email, null, null, password, null)));
-    var parsedUserJson = const JsonDecoder().convert(response.body);
-    settingsRepository.deleteSettings();
-    String emailUser = parsedUserJson['email'];
-    String name = parsedUserJson['name'];
-    String surname = parsedUserJson['surname'];
-    String token = parsedUserJson['token'];
-    Address address = Address.fromJson(parsedUserJson['address']);
-    var settings = Settings(name, surname, emailUser, token, address);
-    return settingsRepository.saveSettings(settings);
+    if(response.statusCode == 200){
+      var parsedUserJson = const JsonDecoder().convert(response.body);
+      settingsRepository.deleteSettings();
+      String emailUser = parsedUserJson['email'];
+      String name = parsedUserJson['name'];
+      String surname = parsedUserJson['surname'];
+      String token = parsedUserJson['token'];
+      Address address = Address.fromJson(parsedUserJson['address']);
+      var settings = Settings(name, surname, emailUser, token, address);
+      settingsRepository.saveSettings(settings);
+      return true;
+    } else {
+      return false;
+    }
   }
 
   Future<void> register(User user) async {

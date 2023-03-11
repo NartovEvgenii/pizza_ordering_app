@@ -62,6 +62,7 @@ class _LoginPageState extends State<LoginPage> {
                               Padding(
                                   padding: const EdgeInsets.only(left: 30, right: 30, bottom: 10),
                                   child: TextField(
+                                    obscureText: true,
                                     onChanged: _onPasswordChanged,
                                     decoration: InputDecoration(
                                       border: OutlineInputBorder(
@@ -117,8 +118,22 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   bool _validate() {
-    return  _email.isNotEmpty &&  _password.isNotEmpty ;
+    if(_email.isEmpty || _password.isEmpty) {
+      showSnackBar(context, "Not all fields are filled");
+      return false;
+    }
+    return true;
   }
+
+  void showSnackBar(BuildContext context, String text){
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(text),
+          backgroundColor: Colors.red,
+        )
+    );
+  }
+
 
   Future<dynamic> goToIntroPage(BuildContext context) {
     return Navigator.of(context).push(MaterialPageRoute(
@@ -126,11 +141,15 @@ class _LoginPageState extends State<LoginPage> {
     ));
   }
 
-  Future<dynamic> onLoginButtonClicked(BuildContext context) {
-    _userService.login(_email, _password);
-    return Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) =>  const MainPage(),
-    ));
+  Future<dynamic> onLoginButtonClicked(BuildContext context) async {
+    bool res = await _userService.login(_email, _password);
+    if(res){
+      return Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) =>  const MainPage(),
+      ));
+    } else {
+      showSnackBar(context, "User with these parameters not found");
+    }
   }
 
 }

@@ -35,4 +35,12 @@ abstract class ButtonStyles {
     )
   );
 
+  static ButtonStyle buttonADDStyle = ElevatedButton.styleFrom(
+      minimumSize: const Size(80, 48),
+      backgroundColor: Colors.orange,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(13),
+      )
+  );
+
 }

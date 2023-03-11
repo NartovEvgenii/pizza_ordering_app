@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
 import '../domain/settings.dart';
+import '../service/order_user_service.dart';
 import '../service/settings_service.dart';
 import '../styles/Styles.dart';
 import 'intro_page.dart';
@@ -17,6 +18,7 @@ class UserPage extends StatefulWidget {
 
 class _UserPageState extends State<UserPage> {
 
+  final _orderUserService = GetIt.I.get<OrderUserService>();
   final _settingsService = GetIt.I.get<SettingsService>();
 
   @override
@@ -71,6 +73,7 @@ class _UserPageState extends State<UserPage> {
 
   Future<dynamic> logOutButtonClicked(BuildContext context) {
     _settingsService.deleteSettings();
+    _orderUserService.deleteOrderUser();
     return Navigator.of(context).push(MaterialPageRoute(
       builder: (context) =>  const IntroPage(),
     ));

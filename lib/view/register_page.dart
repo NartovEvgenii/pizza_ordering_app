@@ -22,7 +22,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
   final _userService = GetIt.I.get<UserService>();
   final _addressService = GetIt.I.get<AddressService>();
-  final _settingsService = GetIt.I.get<SettingsService>();
   String _name = '';
   String _surname = '';
   String _email = '';
@@ -62,75 +61,37 @@ class _RegisterPageState extends State<RegisterPage> {
                                   padding: const EdgeInsets.only(left: 30, right: 30, bottom: 10),
                                   child: TextField(
                                     onChanged: _onNameChanged,
-                                    decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(33.0),
-                                      ),
-                                      filled: true,
-                                      fillColor: Colors.white,
-                                      hintStyle: TextStyle(color: Colors.grey[800]),
-                                      hintText: "Name",
-                                    ),
+                                    decoration: getFieldInputDecoration("Name"),
                                   )
                               ),
                               Padding(
                                   padding: const EdgeInsets.only(left: 30, right: 30, bottom: 10),
                                   child: TextField(
                                     onChanged: _onSurnameChanged,
-                                    decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(33.0),
-                                      ),
-                                      filled: true,
-                                      fillColor: Colors.white,
-                                      hintStyle: TextStyle(color: Colors.grey[800]),
-                                      hintText: "Surname",
-                                    ),
+                                    decoration: getFieldInputDecoration("Surname"),
                                   )
                               ),
                               Padding(
                                   padding: const EdgeInsets.only(left: 30, right: 30, bottom: 10),
                                   child: TextField(
                                     onChanged: _onEmailChanged,
-                                    decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(33.0),
-                                      ),
-                                      filled: true,
-                                      fillColor: Colors.white,
-                                      hintStyle: TextStyle(color: Colors.grey[800]),
-                                      hintText: "Email",
-                                    ),
+                                    decoration: getFieldInputDecoration("Email"),
                                   )
                               ),
                               Padding(
                                   padding: const EdgeInsets.only(left: 30, right: 30, bottom: 10),
                                   child: TextField(
+                                    obscureText: true,
                                     onChanged: _onPasswordChanged,
-                                    decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(33.0),
-                                      ),
-                                      filled: true,
-                                      fillColor: Colors.white,
-                                      hintStyle: TextStyle(color: Colors.grey[800]),
-                                      hintText: "Password",
-                                    ),
+                                    decoration: getFieldInputDecoration("Password"),
                                   )
                               ),
                               Padding(
                                   padding: const EdgeInsets.only(left: 30, right: 30, bottom: 10),
                                   child: TextField(
+                                    obscureText: true,
                                     onChanged: _onConfirmPasswordChanged,
-                                    decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(33.0),
-                                      ),
-                                      filled: true,
-                                      fillColor: Colors.white,
-                                      hintStyle: TextStyle(color: Colors.grey[800]),
-                                      hintText: "Confirm Password",
-                                    ),
+                                    decoration: getFieldInputDecoration("Confirm Password"),
                                   )
                               ),
                               Padding(
@@ -202,7 +163,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               ElevatedButton(
                                 style: ButtonStyles.buttonStyle,
                                 onPressed: () =>
-                                    _validate() ? onRegisterButtonClicked(context) : null,
+                                    _validate(context) ? onRegisterButtonClicked(context) : null,
                                 child: const Text('Next',
                                     style: TextStyles.textButton
                                 ),
@@ -226,6 +187,18 @@ class _RegisterPageState extends State<RegisterPage> {
               )
             ]
         )
+    );
+  }
+
+  InputDecoration getFieldInputDecoration(String hintText) {
+    return InputDecoration(
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(33.0),
+      ),
+      filled: true,
+      fillColor: Colors.white,
+      hintStyle: TextStyle(color: Colors.grey[800]),
+      hintText: hintText,
     );
   }
 
@@ -271,15 +244,38 @@ class _RegisterPageState extends State<RegisterPage> {
     });
   }
 
-  bool _validate() {
-    return _name.isNotEmpty && _surname.isNotEmpty && _email.isNotEmpty &&
-        _password.isNotEmpty && _confirmPassword.isNotEmpty;
+  bool _validate(BuildContext context) {
+    if(_name.isEmpty || _surname.isEmpty || _email.isEmpty ||
+        _password.isEmpty || _confirmPassword.isEmpty){
+      showSnackBar(context, "Not all fields are filled");
+      return false;
+       }else if(_password !=  _confirmPassword){
+      showSnackBar(context, "Password mismatch");
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  void showSnackBar(BuildContext context, String text){
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(text),
+          backgroundColor: Colors.red,
+        )
+    );
   }
 
   Future<dynamic> onRegisterButtonClicked(BuildContext context) {
 
     User user = User( _email, _name, _surname, _password, _address);
     _userService.register(user);
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("User successfully created"),
+          backgroundColor: Colors.green,
+        )
+    );
 
     return Navigator.of(context).push(MaterialPageRoute(
       builder: (context) =>  const MainPage(),

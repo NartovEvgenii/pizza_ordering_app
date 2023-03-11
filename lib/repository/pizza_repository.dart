@@ -1,10 +1,11 @@
 import 'package:hive/hive.dart';
 
-import '../domain/Pizza.dart';
-
+import '../domain/pizza.dart';
 
 abstract class AbstractPizzaRepository {
-  Future<List<Pizza>?> getPizzas();
+  Future<List<Pizza>> getPizzas();
+
+  Future<void> deletePizzas();
 
   Future<void> addPizza(Pizza pizza);
 
@@ -21,6 +22,12 @@ class PizzaRepository extends AbstractPizzaRepository {
   Future<void> addPizza(Pizza pizza) async {
     var box = await Hive.openBox<Pizza>('pizzas');
     await  box.add(pizza);
+  }
+
+  @override
+  Future<void> deletePizzas() async {
+    var box = await Hive.openBox<Pizza>('pizzas');
+    await box.clear();
   }
 
 }

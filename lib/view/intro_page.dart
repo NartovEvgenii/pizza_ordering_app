@@ -28,7 +28,6 @@ class IntroPage extends StatelessWidget {
                       Expanded(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
-
                           children: [
                             ElevatedButton(
                               style: ButtonStyles.buttonStyle,

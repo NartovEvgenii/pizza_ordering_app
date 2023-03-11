@@ -33,13 +33,13 @@ class Pizza {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is Pizza &&
-          runtimeType == other.runtimeType &&
-          idPizza == other.idPizza &&
-          title == other.title &&
-          imagePath == other.imagePath &&
-          description == other.description &&
-          price == other.price;
+          other is Pizza &&
+              runtimeType == other.runtimeType &&
+              idPizza == other.idPizza &&
+              title == other.title &&
+              imagePath == other.imagePath &&
+              description == other.description &&
+              price == other.price;
 
   @override
   int get hashCode =>
@@ -49,4 +49,3 @@ class Pizza {
       description.hashCode ^
       price.hashCode;
 }
-
