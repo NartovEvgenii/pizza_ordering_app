@@ -28,7 +28,9 @@ class _RegisterPageState extends State<RegisterPage> {
   String _password = '';
   String _confirmPassword = '';
   Address? _address;
+  Address? _customAddress;
   int dropDownValue = 0;
+  List<Address> addresses = [];
 
   final TextEditingController textEditingController = TextEditingController();
 
@@ -103,12 +105,13 @@ class _RegisterPageState extends State<RegisterPage> {
                                       borderRadius: BorderRadius.circular(33.0),
                                       ),
                                     child: FutureBuilder<List<Address>>(
-                                      future: _addressService.getAddresses(),
+                                      future: _addressService.getFullAddresses(),
                                       builder: (context, snapshot) {
-                                        print(snapshot.hasData);
                                         if (snapshot.hasData) {
-                                          var addresses = snapshot.data!;
-
+                                          addresses = snapshot.data!;
+                                          if(_customAddress != null){
+                                            addresses.add(_customAddress!);
+                                          }
                                           return DropdownButtonHideUnderline(
                                             child: DropdownButton2<Address>(
                                                 isExpanded: true,

@@ -1,3 +1,5 @@
+import 'package:pizza_ordering_app/domain/address.dart';
+
 import '../domain/settings.dart';
 import '../repository/settings_repository.dart';
 
@@ -6,6 +8,12 @@ class SettingsService {
 
   Future<Settings?> getSettings() {
     return repository.getSettings();
+  }
+
+  Future<void> updateGeneralAddress(Address address) async {
+    Settings? settings = await repository.getSettings();
+    settings?.address = address;
+    return repository.saveSettings(settings!);
   }
 
   Future<void> saveSettings(Settings settings) {

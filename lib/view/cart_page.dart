@@ -218,6 +218,8 @@ class _CartPageState extends State<CartPage> {
   }
 
   Future<void> _onPayClicked(BuildContext context) async {
-
+    await _orderUserService.deleteOrderUser();
+    setState(() {
+    });
   }
 }

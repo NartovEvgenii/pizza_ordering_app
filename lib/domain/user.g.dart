@@ -14,7 +14,9 @@ User _$UserFromJson(Map<String, dynamic> json) => User(
       json['address'] == null
           ? null
           : Address.fromJson(json['address'] as Map<String, dynamic>),
-    );
+    )..addresses = (json['addresses'] as List<dynamic>)
+        .map((e) => Address.fromJson(e as Map<String, dynamic>))
+        .toList();
 
 Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'email': instance.email,
@@ -22,4 +24,5 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'surname': instance.surname,
       'password': instance.password,
       'address': instance.address,
+      'addresses': instance.addresses,
     };

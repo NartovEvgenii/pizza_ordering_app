@@ -10,6 +10,7 @@ class User {
   final String? surname;
   final String? password;
   final Address? address;
+  List<Address> addresses = [];
 
   User(this.email, this.name, this.surname, this.password, this.address);
 

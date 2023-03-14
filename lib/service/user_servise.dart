@@ -1,12 +1,15 @@
 import 'dart:convert';
+import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:pizza_ordering_app/domain/address.dart';
 import '../domain/settings.dart';
 import '../domain/user.dart';
 import '../repository/settings_repository.dart';
+import 'address_service.dart';
 
 class UserService {
   SettingsRepository settingsRepository = SettingsRepository();
+  AddressService _addressService = GetIt.I.get<AddressService>();
 
 
   Future<bool> login(String email, String password) async {
@@ -26,6 +29,11 @@ class UserService {
       String token = parsedUserJson['token'];
       Address address = Address.fromJson(parsedUserJson['address']);
       var settings = Settings(name, surname, emailUser, token, address);
+      var parsedJsonAddresses = parsedUserJson["addresses"];
+      for (int i = 0; i < parsedJsonAddresses.length; i++) {
+        Address address = Address.fromJson(parsedJsonAddresses[i]);
+        _addressService.addAddress(address);
+      }
       settingsRepository.saveSettings(settings);
       return true;
     } else {
@@ -48,6 +56,11 @@ class UserService {
     String token = parsedUserJson['token'];
     Address address = Address.fromJson(parsedUserJson['address']);
     var settings = Settings(name, surname, email, token, address);
+    var parsedJsonAddresses = parsedUserJson["addresses"];
+    for (int i = 0; i < parsedJsonAddresses.length; i++) {
+      Address address = Address.fromJson(parsedJsonAddresses[i]);
+      _addressService.addAddress(address);
+    }
     return settingsRepository.saveSettings(settings);
   }
 
